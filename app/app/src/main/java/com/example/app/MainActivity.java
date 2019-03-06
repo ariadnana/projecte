@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    List<Concert> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView llista = findViewById(R.id.llista);
+        llista.setAdapter(new ConcertAdapter(this));
         llista.setLayoutManager(new LinearLayoutManager(this));
         llista.setHasFixedSize(true);
-        llista.setAdapter(new ConcertAdapter(this));
     }
 
 
@@ -52,9 +53,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class ConcertAdapter extends RecyclerView.Adapter<ViewHolder> {
-        private String URL_BASE = "http://192.168.1.40/API/public/web/concerts";
+        private String URL_BASE = "http://192.168.1.36/API/public/web/concerts";
         private static final String TAG = "ConcertAdapter";
-        List<Concert> items;
         private RequestQueue requestQueue;
         JsonObjectRequest jsArrayRequest;
 
@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
-            holder.Nom.setText(String.valueOf(items.get(pos)));
-            holder.Data.setText(String.valueOf(items.get(pos)));
-            holder.Lloc.setText(String.valueOf(items.get(pos)));
+            holder.Nom.setText(String.valueOf(items.get(pos).Nom));
+            holder.Data.setText(String.valueOf(items.get(pos).Data));
+            holder.Lloc.setText(String.valueOf(items.get(pos).Lloc));
         }
 
         @Override

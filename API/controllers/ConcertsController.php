@@ -69,9 +69,15 @@ class ConcertsController extends Controller
         $query	->select(['concerts.id', 'concerts.nom', 'data', 'localitzacions.nom as localitzacio'])  
                 ->from('concerts')
                 ->join('LEFT JOIN', 'localitzacions',
-                    'concerts.localitzacio_id =localitzacions.id'); 
+                    'concerts.localitzacio_id =localitzacions.id')
+                ->where('data>"'.date("Y-m-d").' 00:00:00"')
+                ->orderBy('data'); 
         $command = $query->createCommand();
-        return $command->queryAll();
+        $obj = (object) [
+            'items' => $command->queryAll()
+        ];
+        echo json_encode($obj);
+        exit();
     }
 
     /**

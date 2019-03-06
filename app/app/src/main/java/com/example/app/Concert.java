@@ -2,9 +2,9 @@ package com.example.app;
 
 public class Concert {
     // Atributs
-    private String Nom;
-    private String Data;
-    private String Lloc;
+    public String Nom;
+    public String Data;
+    public String Lloc;
 
     public Concert() {
     }
