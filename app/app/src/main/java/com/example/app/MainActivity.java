@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,17 +26,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    List<Concert> items;
+    private static final String TAG = "ConcertAdapter";
+    private static final String URL_BASE = "http://192.168.1.36/API/public/web/concerts";
+
+    List<Concert> concerts;
+    private ConcertAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        concerts = new ArrayList<>();
+        adapter = new ConcertAdapter();
+
+        fetchConcerts();
+
         RecyclerView llista = findViewById(R.id.llista);
-        llista.setAdapter(new ConcertAdapter(this));
+        llista.setAdapter(adapter);
         llista.setLayoutManager(new LinearLayoutManager(this));
-        llista.setHasFixedSize(true);
+        // llista.setHasFixedSize(true);
+    }
+
+    void fetchConcerts() {
+        RequestQueue requestQueue;
+        JsonObjectRequest jsArrayRequest;
+
+        requestQueue = Volley.newRequestQueue(this);
+        jsArrayRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL_BASE ,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        parseJson(response);
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "Error Respuesta en JSON: " + error.getMessage());
+                        // TODO: posar un toast perquè l'usuari sàpiga que hi ha hagut un error
+                    }
+                }
+        );
+        requestQueue.add(jsArrayRequest);
     }
 
 
@@ -53,10 +88,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class ConcertAdapter extends RecyclerView.Adapter<ViewHolder> {
-        private String URL_BASE = "http://192.168.1.36/API/public/web/concerts";
-        private static final String TAG = "ConcertAdapter";
-        private RequestQueue requestQueue;
-        JsonObjectRequest jsArrayRequest;
 
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = getLayoutInflater().inflate(R.layout.list_item, parent, false);
@@ -65,48 +96,22 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
-            holder.Nom.setText(String.valueOf(items.get(pos).Nom));
-            holder.Data.setText(String.valueOf(items.get(pos).Data));
-            holder.Lloc.setText(String.valueOf(items.get(pos).Lloc));
+            holder.Nom.setText(String.valueOf(concerts.get(pos).Nom));
+            holder.Data.setText(String.valueOf(concerts.get(pos).Data));
+            holder.Lloc.setText(String.valueOf(concerts.get(pos).Lloc));
         }
 
         @Override
         public int getItemCount() {
-            return items.size();
-        }
-
-        public ConcertAdapter(Context context) {
-            requestQueue = Volley.newRequestQueue(context);
-            jsArrayRequest = new JsonObjectRequest(
-                    Request.Method.GET,
-                    URL_BASE ,
-                    null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            items = parseJson(response);
-                            notifyDataSetChanged();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d(TAG, "Error Respuesta en JSON: " + error.getMessage());
-
-                        }
-                    }
-            );
-
-            requestQueue.add(jsArrayRequest);
+            return concerts.size();
         }
     }
 
-    public List<Concert> parseJson(JSONObject jsonObject){
-        List<Concert> Concerts = new ArrayList();
+    public void parseJson(JSONObject jsonObject){
         JSONArray jsonArray= null;
 
         try {
-            jsonArray = jsonObject.getJSONArray("items");
+            jsonArray = jsonObject.getJSONArray("concerts");
 
             for(int i=0; i<jsonArray.length(); i++){
 
@@ -118,8 +123,7 @@ public class MainActivity extends AppCompatActivity {
                             objecte.getString("localitzacio"),
                             objecte.getString("data"));
 
-
-                    Concerts.add(post);
+                    concerts.add(post);
 
                 } catch (JSONException e) {
                     Log.e("ConcertAdapter", "Error de parsing: "+ e.getMessage());
@@ -129,8 +133,5 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-        return Concerts;
     }
 }
