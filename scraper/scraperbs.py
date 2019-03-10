@@ -5,11 +5,18 @@ from bs4 import BeautifulSoup
 import pymysql.cursors
 
 connection = pymysql.connect(host='localhost',
+                             user='ariadnatfg',
+                             password='1234',
+                             db='projecte',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+
+"""connection = pymysql.connect(host='localhost',
                              user='root',
                              password='',
                              db='projecte',
                              charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+                             cursorclass=pymysql.cursors.DictCursor)"""
 
 i = 1;
 page = requests.get('https://altaveu.cat/concerts?page=1')

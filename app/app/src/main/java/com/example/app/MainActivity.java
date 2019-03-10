@@ -27,7 +27,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "ConcertAdapter";
-    private static final String URL_BASE = "http://192.168.1.36/API/public/web/concerts";
+    private static final String URL_BASE = "http://tfg.xicota.cat/concerts";
 
     List<Concert> concerts;
     private ConcertAdapter adapter;
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView llista = findViewById(R.id.llista);
         llista.setAdapter(adapter);
         llista.setLayoutManager(new LinearLayoutManager(this));
-        // llista.setHasFixedSize(true);
     }
 
     void fetchConcerts() {
