@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         JSONArray jsonArray= null;
 
         try {
-            jsonArray = jsonObject.getJSONArray("concerts");
+            jsonArray = jsonObject.getJSONArray("items");
 
             for(int i=0; i<jsonArray.length(); i++){
 
