@@ -11,8 +11,10 @@ use Yii;
  * @property string $nom
  * @property double $lat
  * @property double $lng
+ * @property int $poblacio_id
  *
  * @property Concerts[] $concerts
+ * @property Poblacions $poblacio
  */
 class Localitzacions extends \yii\db\ActiveRecord
 {
@@ -31,7 +33,9 @@ class Localitzacions extends \yii\db\ActiveRecord
     {
         return [
             [['lat', 'lng'], 'number'],
+            [['poblacio_id'], 'integer'],
             [['nom'], 'string', 'max' => 2048],
+            [['poblacio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Poblacions::className(), 'targetAttribute' => ['poblacio_id' => 'id']],
         ];
     }
 
@@ -45,6 +49,7 @@ class Localitzacions extends \yii\db\ActiveRecord
             'nom' => 'Nom',
             'lat' => 'Lat',
             'lng' => 'Lng',
+            'poblacio_id' => 'Poblacio ID',
         ];
     }
 
@@ -54,5 +59,13 @@ class Localitzacions extends \yii\db\ActiveRecord
     public function getConcerts()
     {
         return $this->hasMany(Concerts::className(), ['localitzacio_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPoblacio()
+    {
+        return $this->hasOne(Poblacions::className(), ['id' => 'poblacio_id']);
     }
 }

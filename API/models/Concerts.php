@@ -15,6 +15,7 @@ use Yii;
  * @property string $web
  * @property string $preu
  * @property string $imatge
+ * @property string $nomcard
  *
  * @property Localitzacions $localitzacio
  * @property ConcertsArtistes[] $concertsArtistes
@@ -39,7 +40,7 @@ class Concerts extends \yii\db\ActiveRecord
             [['data'], 'safe'],
             [['desc'], 'string'],
             [['localitzacio_id'], 'integer'],
-            [['nom'], 'string', 'max' => 2048],
+            [['nom', 'nomcard'], 'string', 'max' => 2048],
             [['web'], 'string', 'max' => 2000],
             [['preu', 'imatge'], 'string', 'max' => 255],
             [['localitzacio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Localitzacions::className(), 'targetAttribute' => ['localitzacio_id' => 'id']],
@@ -60,6 +61,7 @@ class Concerts extends \yii\db\ActiveRecord
             'web' => 'Web',
             'preu' => 'Preu',
             'imatge' => 'Imatge',
+            'nomcard' => 'Nomcard',
         ];
     }
 
@@ -69,6 +71,15 @@ class Concerts extends \yii\db\ActiveRecord
     public function getLocalitzacio()
     {
         return $this->hasOne(Localitzacions::className(), ['id' => 'localitzacio_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPoblacio()
+    {
+        return $this->hasOne(Poblacions::className(), ['id' => 'poblacio_id'])
+            ->viaTable('localitzacions', ['id' => 'localitzacio_id']);
     }
 
     /**

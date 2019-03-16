@@ -66,10 +66,12 @@ class ConcertsController extends Controller
         //http://localhost/API/public/web/concerts
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $query = new Query;
-        $query	->select(['concerts.id', 'concerts.nom', 'data', 'localitzacions.nom as localitzacio'])  
+        $query	->select(['concerts.id', 'concerts.nom', 'data', 'poblacions.nom as localitzacio'])  
                 ->from('concerts')
                 ->join('LEFT JOIN', 'localitzacions',
                     'concerts.localitzacio_id =localitzacions.id')
+                ->join('LEFT JOIN', 'poblacions',
+                    'localitzacions.poblacio_id =poblacions.id')
                 ->where('data>"'.date("Y-m-d").' 00:00:00"')
                 ->orderBy('data'); 
         $command = $query->createCommand();
@@ -81,64 +83,32 @@ class ConcertsController extends Controller
     }
 
     /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
+     * Displays homepage.
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionConcert($id)
     {
-        return $this->render('about');
+        //http://localhost/API/public/web/concerts
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $concert = Concerts::findOne($id);
+        $artistes = Artistes::find()
+            ->select(['nom'])
+            ->leftJoin('concerts_artistes', 'artista_id=artistes.id')
+            ->where(['concert_id' => $id])
+            ->asArray()
+            ->all();
+        $obj = (object) [
+            'nom' => $concert->nom,
+            'data' => $concert->data,
+            'desc' => $concert->desc,
+            'localitzacio' => $concert->localitzacio->nom,
+            'poblacio' => $concert->poblacio->nom,
+            'web' => $concert->web,
+            'preu' => $concert->preu,
+            'artistes' => $artistes,  
+        ];
+        echo json_encode($obj);
+        exit();
     }
 }
