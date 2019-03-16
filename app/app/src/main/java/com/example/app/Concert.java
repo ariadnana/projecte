@@ -2,6 +2,7 @@ package com.example.app;
 
 public class Concert {
     // Atributs
+    public Integer Id;
     public String Nom;
     public String Data;
     public String Lloc;
@@ -9,10 +10,19 @@ public class Concert {
     public Concert() {
     }
 
-    public Concert(String Nom, String Lloc, String Data) {
+    public Concert(Integer Id, String Nom, String Lloc, String Data) {
+        this.Id = Id;
         this.Nom = Nom;
         this.Lloc = Lloc;
         this.Data = Data;
+    }
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer Id) {
+        this.Id = Id;
     }
 
     public String getNom() {
@@ -34,7 +44,6 @@ public class Concert {
     public String getData() {
         return Data;
     }
-
 
     public void setData(String Data) {
         this.Data = Data;
