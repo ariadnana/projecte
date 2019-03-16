@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.android.volley.Request;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView llista = findViewById(R.id.llista);
         llista.setAdapter(adapter);
         llista.setLayoutManager(new LinearLayoutManager(this));
+        ProgressBar pgsBar = (ProgressBar)findViewById(R.id.pBar);
+        pgsBar.setVisibility(View.GONE);
     }
 
     void fetchConcerts() {

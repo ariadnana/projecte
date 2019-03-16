@@ -3,8 +3,10 @@ package com.example.app;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -57,6 +59,8 @@ public class ConcertActivity extends AppCompatActivity{
 
         llg=(ListView)findViewById(R.id.Artistes);
         llg.setAdapter(artistesAdapter);
+        ProgressBar pgsBar = (ProgressBar)findViewById(R.id.pBar);
+        pgsBar.setVisibility(View.GONE);
     }
 
     void fetchConcert() {
