@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -49,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView llista = findViewById(R.id.llista);
         llista.setAdapter(adapter);
         llista.setLayoutManager(new LinearLayoutManager(this));
-        ProgressBar pgsBar = (ProgressBar)findViewById(R.id.pBar);
-        pgsBar.setVisibility(View.GONE);
     }
 
     void fetchConcerts() {
@@ -67,13 +67,17 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         parseJson(response);
                         adapter.notifyDataSetChanged();
+                        ProgressBar pgsBar = (ProgressBar)findViewById(R.id.pBar);
+                        pgsBar.setVisibility(View.GONE);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Error Respuesta en JSON: " + error.getMessage());
-                        // TODO: posar un toast perquè l'usuari sàpiga que hi ha hagut un error
+
+                        Toast.makeText(MainActivity.this,
+                                "Hi ha hagut un error", Toast.LENGTH_LONG).show();
                     }
                 }
         );
