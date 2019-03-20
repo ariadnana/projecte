@@ -46,7 +46,7 @@ public class ConcertActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_concert);
+        setContentView(R.layout.activity_concert2);
 
         fetchConcert();
         nom = (TextView)findViewById(R.id.Nom);
@@ -71,13 +71,32 @@ public class ConcertActivity extends AppCompatActivity{
 
     void refreshConcertInfo() {
         nom.setText(concert.getNom());
+        if(concert.getDesc()=="null"){
+            desc.setVisibility(View.GONE);
+        }
         desc.setText(concert.getDesc());
+        if(concert.getPreu()=="null"){
+            preu.setVisibility(View.GONE);
+        }
         preu.setText(concert.getPreu());
+        if(concert.getData()=="null"){
+            data.setVisibility(View.GONE);
+        }
         data.setText(concert.getData());
+        if(concert.getPoblacio()=="null"){
+            poblacio.setVisibility(View.GONE);
+        }
         poblacio.setText(concert.getPoblacio());
+        if(concert.getLocalitzacio()=="null"){
+            localitzacio.setVisibility(View.GONE);
+        }
         localitzacio.setText(concert.getLocalitzacio());
+        if(concert.getWeb()=="null"){
+            web.setVisibility(View.GONE);
+        }
         web.setText(concert.getWeb());
         artistes = concert.getArtistes();
+        artistesAdapter.addAll(artistes);
         artistesAdapter.notifyDataSetChanged();
     }
 
