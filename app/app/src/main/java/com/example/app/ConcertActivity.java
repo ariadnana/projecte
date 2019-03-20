@@ -29,8 +29,19 @@ public class ConcertActivity extends AppCompatActivity{
     private static final String URL_BASE = "http://tfg.xicota.cat/concerts/concert/";
 
     ConcertComplet concert;
+
     private int id;
     private ListView llg;
+    private TextView nom;
+    private TextView data;
+    private TextView desc;
+    private TextView localitzacio;
+    private TextView poblacio;
+    private TextView web;
+    private TextView preu;
+
+    List<String> artistes;
+    private ArrayAdapter<String> artistesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +49,36 @@ public class ConcertActivity extends AppCompatActivity{
         setContentView(R.layout.activity_concert);
 
         fetchConcert();
-        TextView nom = (TextView)findViewById(R.id.Nom);
-        nom.setText(concert.getNom());
-        TextView data = (TextView)findViewById(R.id.Data);
-        data.setText(concert.getData());
-        TextView desc = (TextView)findViewById(R.id.Desc);
-        desc.setText(concert.getDesc());
-        TextView localitzacio = (TextView)findViewById(R.id.Localitzacio);
-        localitzacio.setText(concert.getLocalitzacio());
-        TextView poblacio = (TextView)findViewById(R.id.Poblacio);
-        poblacio.setText(concert.getPoblacio());
-        TextView web = (TextView)findViewById(R.id.Web);
-        web.setText(concert.getWeb());
-        TextView preu = (TextView)findViewById(R.id.Preu);
-        preu.setText(concert.getPreu());
+        nom = (TextView)findViewById(R.id.Nom);
+        data = (TextView)findViewById(R.id.Data);
+        desc = (TextView)findViewById(R.id.Desc);
+        localitzacio = (TextView)findViewById(R.id.Localitzacio);
+        poblacio = (TextView)findViewById(R.id.Poblacio);
+        web = (TextView)findViewById(R.id.Web);
+        preu = (TextView)findViewById(R.id.Preu);
 
-        ArrayAdapter<String> artistesAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                concert.getArtistes() );
+        artistes = new ArrayList<String>();
 
-        llg=(ListView)findViewById(R.id.Artistes);
+        artistesAdapter = new ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_list_item_1,
+            artistes
+        );
+
+        llg = (ListView)findViewById(R.id.Artistes);
         llg.setAdapter(artistesAdapter);
+    }
+
+    void refreshConcertInfo() {
+        nom.setText(concert.getNom());
+        desc.setText(concert.getDesc());
+        preu.setText(concert.getPreu());
+        data.setText(concert.getData());
+        poblacio.setText(concert.getPoblacio());
+        localitzacio.setText(concert.getLocalitzacio());
+        web.setText(concert.getWeb());
+        artistes = concert.getArtistes();
+        artistesAdapter.notifyDataSetChanged();
     }
 
     void fetchConcert() {
@@ -94,25 +113,27 @@ public class ConcertActivity extends AppCompatActivity{
 
     public void parseJson(JSONObject c) {
         JSONArray jsonArray = null;
-        List<String> a = new ArrayList<>();
+        List<String> artistes = new ArrayList<>();
 
         try {
             jsonArray = c.getJSONArray("artistes");
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject objecte = jsonArray.getJSONObject(i);
-                a.add(objecte.getString("nom"));
+                artistes.add(objecte.getString("nom"));
             }
 
             concert = new ConcertComplet(
                     c.getString("nom"),
                     c.getString("data"),
                     c.getString("desc"),
-                    c.getString("localitzacion"),
+                    c.getString("localitzacio"),
                     c.getString("poblacio"),
                     c.getString("web"),
                     c.getString("preu"),
-                    a);
+                    artistes);
+
+            refreshConcertInfo();
 
         } catch (JSONException e) {
             Log.e("ConcertActivity", "Error de parsing: " + e.getMessage());
