@@ -27,95 +27,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConcertActivity extends AppCompatActivity{
-    private static final String TAG = "ConcertActivity";
+public class DescripcioActivity extends AppCompatActivity {
+    private static final String TAG = "DescripcioActivity";
     private static final String URL_BASE = "http://tfg.xicota.cat/concerts/concert/";
 
     ConcertComplet concert;
 
     private int id;
-    private ListView llg;
     private TextView nom;
-    private TextView data;
     private TextView desc;
-    private TextView localitzacio;
-    private TextView poblacio;
-    private TextView web;
-    private TextView preu;
-
-    List<String> artistes;
-    private ArrayAdapter<String> artistesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_concert2);
+        setContentView(R.layout.activity_descripcio);
 
         fetchConcert();
 
-        artistes = new ArrayList<String>();
-
-        artistesAdapter = new ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_list_item_1,
-            artistes
-        );
-
-        llg = (ListView)findViewById(R.id.Artistes);
-        LayoutInflater inflater = getLayoutInflater();
-        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.concertheader,llg,false);
-        llg.addHeaderView(header);
-
-        llg.setAdapter(artistesAdapter);
-
         nom = (TextView)findViewById(R.id.Nom);
-        data = (TextView)findViewById(R.id.Data);
         desc = (TextView)findViewById(R.id.Desc);
-        localitzacio = (TextView)findViewById(R.id.Localitzacio);
-        poblacio = (TextView)findViewById(R.id.Poblacio);
-        web = (TextView)findViewById(R.id.Web);
-        preu = (TextView)findViewById(R.id.Preu);
     }
 
     void refreshConcertInfo() {
         nom.setText(concert.getNom());
         desc.setText("Descripció: "+concert.getDesc().trim());
-        if(concert.getDesc()=="null") {
-            desc.setText("Descripció: ");
-        } else if(desc.getLineCount()==3){
-            desc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent intent = new Intent(ConcertActivity.this, DescripcioActivity.class);
-                    intent.putExtra("id", id);
-                    ConcertActivity.this.startActivity(intent);
-                }
-            });
-        }
-        preu.setText("Preu: "+concert.getPreu());
-        if(concert.getPreu()=="null"){
-            preu.setText("Preu: ");
-        }
-        data.setText("Data: "+concert.getData());
-        if(concert.getData()=="null"){
-            data.setText("Data: ");
-        }
-        localitzacio.setText("Lloc: "+concert.getLocalitzacio()+" "+concert.getPoblacio());
-        if(concert.getLocalitzacio()=="null"){
-            if(concert.getPoblacio()=="null"){
-                localitzacio.setText("Lloc: ");
-            }
-        } else if(concert.getPoblacio()=="null"){
-            localitzacio.setText("Lloc: "+concert.getLocalitzacio());
-        }
-        web.setText("Web: "+concert.getWeb());
-        if(concert.getWeb()=="null"){
-            web.setText("Web: ");
-        }
-        artistes = concert.getArtistes();
-        artistesAdapter.addAll(artistes);
-        artistesAdapter.notifyDataSetChanged();
     }
 
     void fetchConcert() {
@@ -140,7 +75,7 @@ public class ConcertActivity extends AppCompatActivity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Error Respuesta en JSON: " + error.getMessage());
-                        Toast.makeText(ConcertActivity.this,
+                        Toast.makeText(DescripcioActivity.this,
                                 "Hi ha hagut un error", Toast.LENGTH_LONG).show();
                     }
                 }
