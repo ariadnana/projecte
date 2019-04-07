@@ -61,7 +61,7 @@ class ConcertsController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($artista=null, $data=null, $poblacio=null, $gratuit=0)
     {
         //http://localhost/API/public/web/concerts
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -72,8 +72,14 @@ class ConcertsController extends Controller
                     'concerts.localitzacio_id =localitzacions.id')
                 ->join('LEFT JOIN', 'poblacions',
                     'localitzacions.poblacio_id =poblacions.id')
-                ->where('data>"'.date("Y-m-d").' 00:00:00"')
-                ->orderBy('data'); 
+                ->join('LEFT JOIN', 'concerts_artistes',
+                    'concerts_artistes.concert_id =concerts.id')
+                ->where('data>"'.date("Y-m-d").' 00:00:00"');
+        if(isset($artista)) $query = $query->andWhere(['artista_id' => $artista]);
+        if(isset($data)) $query = $query->andWhere('concerts.data like "'.$data.'%"');
+        if(isset($poblacio)) $query = $query->andWhere(['poblacio_id' => $poblacio]);
+        if($gratuit==1) $query = $query->andWhere(['preu' => 'Gratuït']);
+        $query = $query->orderBy('data'); 
         $command = $query->createCommand();
         $obj = (object) [
             'items' => $command->queryAll()
