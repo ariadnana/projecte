@@ -12,11 +12,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/Web"
             android:layout_alignLeft="@+id/Web"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp" />
+            />
 
         <ProgressBar
             android:id="@+id/pBar"
