@@ -79,7 +79,7 @@ class ConcertsController extends Controller
         if(isset($data)) $query = $query->andWhere('concerts.data like "'.$data.'%"');
         if(isset($poblacio)) $query = $query->andWhere(['poblacio_id' => $poblacio]);
         if($gratuit==1) $query = $query->andWhere(['preu' => 'Gratuït']);
-        $query = $query->orderBy('data'); 
+        $query = $query->groupBy('concerts.id')->orderBy('data'); 
         $command = $query->createCommand();
         $obj = (object) [
             'items' => $command->queryAll()
