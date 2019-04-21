@@ -7,7 +7,9 @@ import java.util.List;
 public class ConcertComplet {
     // Atributs
     public String Nom;
-    public String Data;
+    public String Dia;
+    public String Mes;
+    public String Hora;
     public String Desc;
     public String Localitzacio;
     public String Poblacio;
@@ -18,10 +20,12 @@ public class ConcertComplet {
     public ConcertComplet() {
     }
 
-    public ConcertComplet(String Nom, String Data, String Desc, String Localitzacio, String Poblacio, String Web,
+    public ConcertComplet(String Nom, String Dia, String Mes, String Hora, String Desc, String Localitzacio, String Poblacio, String Web,
                    String Preu, List<String> Artistes) {
         this.Nom = Nom;
-        this.Data = Data;
+        this.Dia = Dia;
+        this.Mes = Mes;
+        this.Hora = Hora;
         this.Desc = Desc;
         this.Localitzacio = Localitzacio;
         this.Poblacio = Poblacio;
@@ -38,9 +42,17 @@ public class ConcertComplet {
         this.Nom = Nom;
     }
 
-    public String getData() { return Data; }
+    public String getDia() { return Dia; }
 
-    public void setData(String Data) { this.Data = Data; }
+    public void setDia(String Dia) { this.Dia = Dia; }
+
+    public String getMes() { return Mes; }
+
+    public void setMes(String Mes) { this.Mes = Mes; }
+
+    public String getHora() { return Hora; }
+
+    public void setHora(String Hora) { this.Hora = Hora; }
 
     public String getDesc() { return Desc; }
 

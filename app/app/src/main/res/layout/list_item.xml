@@ -83,7 +83,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/Nom" />
 
             <TextView
-                android:id="@+id/Lloc"
+                android:id="@+id/Preu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
@@ -93,7 +93,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/Hora" />
 
             <TextView
-                android:id="@+id/Preu"
+                android:id="@+id/Lloc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"

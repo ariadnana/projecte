@@ -5,4 +5,6 @@
     <string name="icon_clock">&#xf017;</string>
     <string name="icon_place">&#xf7a2;</string>
     <string name="icon_price">&#xf4d3;</string>
+    <string name="icon_info">&#xf05a;</string>
+    <string name="icon_web">&#xf0ac;</string>
 </resources>

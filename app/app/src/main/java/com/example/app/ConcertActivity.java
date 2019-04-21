@@ -38,7 +38,9 @@ public class ConcertActivity extends AppCompatActivity{
     private int id;
     private ListView llg;
     private TextView nom;
-    private TextView data;
+    private TextView dia;
+    private TextView mes;
+    private TextView hora;
     private TextView desc;
     private TextView localitzacio;
     private TextView poblacio;
@@ -60,7 +62,7 @@ public class ConcertActivity extends AppCompatActivity{
 
         artistesAdapter = new ArrayAdapter<String>(
             this,
-            android.R.layout.simple_list_item_1,
+            R.layout.list_item_artistes,
             artistes
         );
 
@@ -71,13 +73,23 @@ public class ConcertActivity extends AppCompatActivity{
 
         llg.setAdapter(artistesAdapter);
 
-        nom = (TextView)findViewById(R.id.Nom);
-        data = (TextView)findViewById(R.id.Data);
-        desc = (TextView)findViewById(R.id.Desc);
-        localitzacio = (TextView)findViewById(R.id.Localitzacio);
-        web = (TextView)findViewById(R.id.Web);
-        preu = (TextView)findViewById(R.id.Preu);
         Typeface font = Typeface.createFromAsset( getAssets(), "fonts/fa-solid-900.ttf" );
+        nom = (TextView)findViewById(R.id.Nom);
+        nom.setTypeface(font);
+        dia = (TextView)findViewById(R.id.Dia);
+        dia.setTypeface(font);
+        mes = (TextView)findViewById(R.id.Mes);
+        mes.setTypeface(font);
+        hora = (TextView)findViewById(R.id.Hora);
+        hora.setTypeface(font);
+        desc = (TextView)findViewById(R.id.Desc);
+        desc.setTypeface(font);
+        localitzacio = (TextView)findViewById(R.id.Localitzacio);
+        localitzacio.setTypeface(font);
+        web = (TextView)findViewById(R.id.Web);
+        web.setTypeface(font);
+        preu = (TextView)findViewById(R.id.Preu);
+        preu.setTypeface(font);
         awesomeButton = (Button)findViewById(R.id.awesome_button);
         awesomeButton.setTypeface(font);
         awesomeButton.setText(getString(R.string.icon_plus));
@@ -85,9 +97,9 @@ public class ConcertActivity extends AppCompatActivity{
 
     void refreshConcertInfo() {
         nom.setText(concert.getNom());
-        desc.setText("Descripció: "+concert.getDesc().trim());
+        desc.setText(getString(R.string.icon_info)+" "+concert.getDesc().trim());
         if(concert.getDesc()=="null") {
-            desc.setText("Descripció: ");
+            desc.setText(getString(R.string.icon_info));
         } else if(desc.getLineCount()==3){
             awesomeButton.setVisibility(View.VISIBLE);
             awesomeButton.setOnClickListener(new View.OnClickListener() {
@@ -100,25 +112,24 @@ public class ConcertActivity extends AppCompatActivity{
                 }
             });
         }
-        preu.setText("Preu: "+concert.getPreu());
+        preu.setText(getString(R.string.icon_price)+" "+concert.getPreu());
         if(concert.getPreu()=="null"){
-            preu.setText("Preu: ");
+            preu.setText(getString(R.string.icon_price));
         }
-        data.setText("Data: "+concert.getData());
-        if(concert.getData()=="null"){
-            data.setText("Data: ");
-        }
-        localitzacio.setText("Lloc: "+concert.getLocalitzacio()+" "+concert.getPoblacio());
+        dia.setText(concert.getDia());
+        mes.setText(concert.getMes());
+        hora.setText(getString(R.string.icon_clock)+" "+concert.getHora());
+        localitzacio.setText(getString(R.string.icon_place)+" "+concert.getLocalitzacio()+" "+concert.getPoblacio());
         if(concert.getLocalitzacio()=="null"){
             if(concert.getPoblacio()=="null"){
-                localitzacio.setText("Lloc: ");
+                localitzacio.setText(getString(R.string.icon_place)+" ");
             }
         } else if(concert.getPoblacio()=="null"){
-            localitzacio.setText("Lloc: "+concert.getLocalitzacio());
+            localitzacio.setText(getString(R.string.icon_place)+" "+concert.getLocalitzacio());
         }
-        web.setText("Web: "+concert.getWeb());
+        web.setText(getString(R.string.icon_web)+" "+concert.getWeb());
         if(concert.getWeb()=="null"){
-            web.setText("Web: ");
+            web.setText(getString(R.string.icon_web));
         }
         artistes = concert.getArtistes();
         artistesAdapter.addAll(artistes);
@@ -169,7 +180,9 @@ public class ConcertActivity extends AppCompatActivity{
 
             concert = new ConcertComplet(
                     c.getString("nom"),
-                    c.getString("data"),
+                    c.getString("dia"),
+                    c.getString("mes"),
+                    c.getString("hora"),
                     c.getString("desc"),
                     c.getString("localitzacio"),
                     c.getString("poblacio"),
