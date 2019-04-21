@@ -95,8 +95,8 @@ while (len(concerts)!=0):
             print(lloc)
 
             url_lloc = content.find("div", {"class": "concert-content__map"})
-            if(webcard!=None):
-                urllloc = webcard.find("iframe").get('src').replace(" ", "%20")
+            if(url_lloc!=None):
+                urllloc = url_lloc.find("iframe").get('src').replace(" ", "%20")
                 urllloc = urllloc[:urllloc.find("&ie=")];
                 print(urllloc)
             else:
