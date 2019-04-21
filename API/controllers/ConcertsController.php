@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use DateTime;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -98,6 +99,7 @@ class ConcertsController extends Controller
     public function actionConcert($id)
     {
         //http://localhost/API/public/web/concerts
+        $mesos =["Gen", "Feb", "Març", "Abr", "Maig", "Juny", "Jul", "Ago", "Set", "Oct", "Nov", "Des"];
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $concert = Concerts::findOne($id);
         $artistes = Artistes::find()
@@ -108,7 +110,9 @@ class ConcertsController extends Controller
             ->all();
         $obj = (object) [
             'nom' => $concert->nom,
-            'data' => $concert->data,
+            'dia' => DateTime::createFromFormat("Y-m-d H:i:s", $concert->data)->format("d"),
+            'mes' => $mesos[intval(DateTime::createFromFormat("Y-m-d H:i:s", $concert->data)->format("m"))+1],
+            'hora' => DateTime::createFromFormat("Y-m-d H:i:s", $concert->data)->format("H:i"),
             'desc' => $concert->desc,
             'localitzacio' => $concert->localitzacio->nom,
             'poblacio' => $concert->poblacio->nom,
