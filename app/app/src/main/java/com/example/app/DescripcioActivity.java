@@ -46,6 +46,5 @@ public class DescripcioActivity extends AppCompatActivity {
         ProgressBar pgsBar = (ProgressBar)findViewById(R.id.pBar);
         nom.setText(getIntent().getExtras().getString("nom"));
         desc.setText("Descripció: "+getIntent().getExtras().getString("desc"));
-        pgsBar.setVisibility(View.GONE);
     }
 }
