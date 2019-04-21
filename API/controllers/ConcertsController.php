@@ -87,8 +87,7 @@ class ConcertsController extends Controller
         $obj = (object) [
             'items' => $command->queryAll()
         ];
-        echo json_encode($obj);
-        exit();
+        return $obj;
     }
 
     /**
@@ -118,9 +117,8 @@ class ConcertsController extends Controller
             'poblacio' => $concert->poblacio->nom,
             'web' => $concert->web,
             'preu' => $concert->preu,
-            'artistes' => $artistes,  
+            'artistes' => $concert->artistes,  
         ];
-        echo json_encode($obj);
-        exit();
+        return $obj;
     }
 }
