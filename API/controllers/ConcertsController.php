@@ -66,7 +66,7 @@ class ConcertsController extends Controller
         //http://localhost/API/public/web/concerts
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $query = new Query;
-        $query	->select(['concerts.id', 'concerts.nom', 'data', 'poblacions.nom as localitzacio'])  
+        $query	->select(['concerts.id', 'concerts.nom', 'day(data) as dia', 'month(data) as mes', 'concat(hour(data),":",minute(data))  as hora', 'preu', 'poblacions.nom as localitzacio'])  
                 ->from('concerts')
                 ->join('LEFT JOIN', 'localitzacions',
                     'concerts.localitzacio_id =localitzacions.id')
