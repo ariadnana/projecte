@@ -2,12 +2,14 @@ package com.example.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
     List<Concert> concerts;
     private ConcertAdapter adapter;
+    private Toolbar mTopToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
 
         concerts = new ArrayList<>();
         adapter = new ConcertAdapter(this);
@@ -86,14 +92,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     private class ViewHolder extends RecyclerView.ViewHolder {
-        TextView Nom, Data, Lloc;
+        TextView Nom, Dia, Mes, Lloc, Hora, Preu;
         ConstraintLayout parentLayout;
+
+        Typeface font = Typeface.createFromAsset( getAssets(), "fonts/fa-solid-900.ttf" );
 
         ViewHolder(View itemView) {
             super(itemView);
             this.Nom = itemView.findViewById(R.id.Nom);
-            this.Data = itemView.findViewById(R.id.Data);
+            this.Nom.setTypeface(font);
+            this.Dia = itemView.findViewById(R.id.Dia);
+            this.Dia.setTypeface(font);
+            this.Mes = itemView.findViewById(R.id.Mes);
+            this.Mes.setTypeface(font);
             this.Lloc = itemView.findViewById(R.id.Lloc);
+            this.Lloc.setTypeface(font);
+            this.Hora = itemView.findViewById(R.id.Hora);
+            this.Hora.setTypeface(font);
+            this.Preu = itemView.findViewById(R.id.Preu);
+            this.Preu.setTypeface(font);
             this.parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
@@ -114,8 +131,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int pos) {
             holder.Nom.setText(String.valueOf(concerts.get(pos).Nom));
-            holder.Data.setText(String.valueOf(concerts.get(pos).Data));
-            holder.Lloc.setText(String.valueOf(concerts.get(pos).Lloc));
+            holder.Dia.setText(String.valueOf(concerts.get(pos).Dia));
+            holder.Mes.setText(String.valueOf(concerts.get(pos).Mes));
+            holder.Lloc.setText(getString(R.string.icon_place)+" "+String.valueOf(concerts.get(pos).Lloc));
+            holder.Hora.setText(getString(R.string.icon_clock)+" "+String.valueOf(concerts.get(pos).Hora));
+            if(concerts.get(pos).getPreu()=="null") holder.Preu.setText(getString(R.string.icon_price));
+            else holder.Preu.setText(getString(R.string.icon_price)+" "+String.valueOf(concerts.get(pos).Preu));
             holder.parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,8 +168,11 @@ public class MainActivity extends AppCompatActivity {
                     Concert post = new Concert(
                             objecte.getInt("id"),
                             objecte.getString("nom"),
+                            objecte.getInt("dia"),
+                            objecte.getString("mes"),
+                            objecte.getString("hora"),
                             objecte.getString("localitzacio"),
-                            objecte.getString("data"));
+                            objecte.getString("preu"));
 
                     concerts.add(post);
 

@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">App</string>
+    <string name="app_name">Gresca</string>
     <string name="icon_plus">&#xf067;</string>
     <string name="icon_calendar">&#xf133;</string>
+    <string name="icon_clock">&#xf017;</string>
+    <string name="icon_place">&#xf7a2;</string>
+    <string name="icon_price">&#xf4d3;</string>
 </resources>
