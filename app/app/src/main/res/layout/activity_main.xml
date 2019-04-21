@@ -10,7 +10,9 @@
         android:id="@+id/llista"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp"/>
 
     <ProgressBar
         android:id="@+id/pBar"

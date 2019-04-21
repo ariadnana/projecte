@@ -85,4 +85,17 @@
         android:layout_marginRight="16dp"
         android:text="TextView" />
 
+    <Button
+        android:id="@+id/awesome_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignRight="@+id/Desc"
+        android:layout_alignBottom="@+id/Desc"
+        android:layout_marginBottom="-3dp"
+        android:background="@drawable/button"
+        android:padding="0dp"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="12sp"
+        android:visibility="invisible" />
+
 </RelativeLayout>

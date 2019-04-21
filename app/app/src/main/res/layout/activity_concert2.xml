@@ -12,7 +12,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/Web"
             android:layout_alignLeft="@+id/Web"
-            />
+            android:listSelector="@android:color/transparent" />
 
         <ProgressBar
             android:id="@+id/pBar"

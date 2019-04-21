@@ -1,6 +1,7 @@
 package com.example.app;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,6 +44,7 @@ public class ConcertActivity extends AppCompatActivity{
     private TextView poblacio;
     private TextView web;
     private TextView preu;
+    private Button awesomeButton;
 
     List<String> artistes;
     private ArrayAdapter<String> artistesAdapter;
@@ -72,9 +75,12 @@ public class ConcertActivity extends AppCompatActivity{
         data = (TextView)findViewById(R.id.Data);
         desc = (TextView)findViewById(R.id.Desc);
         localitzacio = (TextView)findViewById(R.id.Localitzacio);
-        poblacio = (TextView)findViewById(R.id.Poblacio);
         web = (TextView)findViewById(R.id.Web);
         preu = (TextView)findViewById(R.id.Preu);
+        Typeface font = Typeface.createFromAsset( getAssets(), "fonts/fa-solid-900.ttf" );
+        awesomeButton = (Button)findViewById(R.id.awesome_button);
+        awesomeButton.setTypeface(font);
+        awesomeButton.setText(getString(R.string.icon_plus));
     }
 
     void refreshConcertInfo() {
@@ -83,12 +89,13 @@ public class ConcertActivity extends AppCompatActivity{
         if(concert.getDesc()=="null") {
             desc.setText("Descripció: ");
         } else if(desc.getLineCount()==3){
-            desc.setOnClickListener(new View.OnClickListener() {
+            awesomeButton.setVisibility(View.VISIBLE);
+            awesomeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent intent = new Intent(ConcertActivity.this, DescripcioActivity.class);
-                    intent.putExtra("id", id);
+                    intent.putExtra("desc", concert.getDesc().trim());
+                    intent.putExtra("nom", concert.getNom());
                     ConcertActivity.this.startActivity(intent);
                 }
             });

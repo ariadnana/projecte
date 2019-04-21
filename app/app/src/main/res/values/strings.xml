@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">App</string>
+    <string name="icon_plus">&#xf067;</string>
+    <string name="icon_calendar">&#xf133;</string>
 </resources>
