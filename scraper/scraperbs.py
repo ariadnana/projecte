@@ -4,19 +4,19 @@ import requests
 from bs4 import BeautifulSoup
 import pymysql.cursors
 
-connection = pymysql.connect(host='localhost',
+"""connection = pymysql.connect(host='localhost',
                              user='ariadnatfg',
                              password='1234',
                              db='projecte',
                              charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+                             cursorclass=pymysql.cursors.DictCursor)"""
 
-"""connection = pymysql.connect(host='localhost',
+connection = pymysql.connect(host='localhost',
                              user='root',
                              password='',
                              db='projecte',
                              charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)"""
+                             cursorclass=pymysql.cursors.DictCursor)
 
 i = 1;
 page = requests.get('https://altaveu.cat/concerts?page=1')
@@ -94,6 +94,14 @@ while (len(concerts)!=0):
                 lloc += p.get_text()+" "
             print(lloc)
 
+            url_lloc = content.find("div", {"class": "concert-content__map"})
+            if(webcard!=None):
+                urllloc = webcard.find("iframe").get('src').replace(" ", "%20")
+                urllloc = urllloc[:urllloc.find("&ie=")];
+                print(urllloc)
+            else:
+                urllloc=None
+
             with connection.cursor() as cursor:
                 # Read a single record
                 sql = "SELECT `id` FROM `localitzacions` WHERE `nom`=%s AND `poblacio_id`=%s"
@@ -103,8 +111,8 @@ while (len(concerts)!=0):
             if(result==None):
                 with connection.cursor() as cursor:
                     # Create a new record
-                    sql = "INSERT INTO `localitzacions` (`nom`,`poblacio_id` ) VALUES (%s, %s)"
-                    cursor.execute(sql, (lloc, poblacio_id))
+                    sql = "INSERT INTO `localitzacions` (`nom`,`poblacio_id`,`url` ) VALUES (%s, %s, %s)"
+                    cursor.execute(sql, (lloc, poblacio_id, urllloc))
                 connection.commit()
                 localitzacio_id = cursor.lastrowid
             else:
