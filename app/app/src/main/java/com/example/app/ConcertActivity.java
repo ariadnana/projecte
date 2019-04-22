@@ -5,8 +5,11 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -33,6 +36,7 @@ import java.util.List;
 public class ConcertActivity extends AppCompatActivity{
     private static final String TAG = "ConcertActivity";
     private static final String URL_BASE = "http://tfg.xicota.cat/concerts/concert/";
+    private Toolbar mTopToolbar;
 
     ConcertComplet concert;
 
@@ -59,6 +63,9 @@ public class ConcertActivity extends AppCompatActivity{
         setContentView(R.layout.activity_concert2);
 
         fetchConcert();
+
+        mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
 
         artistes = new ArrayList<String>();
 
@@ -98,6 +105,26 @@ public class ConcertActivity extends AppCompatActivity{
         awesomeButton2 = (Button)findViewById(R.id.awesome_button2);
         awesomeButton2.setTypeface(font);
         awesomeButton2.setText(getString(R.string.icon_map));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_filtre, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_home) {
+            Intent intent = new Intent(ConcertActivity.this, MainActivity.class);
+            ConcertActivity.this.startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     void refreshConcertInfo() {

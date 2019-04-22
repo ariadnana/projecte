@@ -11,5 +11,9 @@
         <item name="android:background">#541fa2</item>
         <item name="titleTextColor">#FFFFFF</item>
     </style>
+    <style name="Autocomplete">
+        <item name="colorControlNormal">#000000</item>
+        <item name="colorControlActivated">#8E5CD8</item>
+    </style>
 
 </resources>

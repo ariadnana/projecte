@@ -8,4 +8,6 @@
     <string name="icon_info">&#xf05a;</string>
     <string name="icon_web">&#xf0ac;</string>
     <string name="icon_map">&#xf5a0;</string>
+    <string name="icon_search">&#xf002;</string>
+    <string name="icon_artista">&#xf130;</string>
 </resources>
