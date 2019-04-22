@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\Artistes;
 use app\models\Concerts;
 use app\models\Localitzacions;
+use app\models\Poblacions;
 use yii\db\Query;
 
 class ConcertsController extends Controller
@@ -77,10 +78,12 @@ class ConcertsController extends Controller
                     'localitzacions.poblacio_id =poblacions.id')
                 ->join('LEFT JOIN', 'concerts_artistes',
                     'concerts_artistes.concert_id =concerts.id')
+                    ->join('LEFT JOIN', 'artistes',
+                        'concerts_artistes.artista_id =artistes.id')
                 ->where('data>"'.date("Y-m-d").' 00:00:00"');
-        if(isset($artista)) $query = $query->andWhere(['artista_id' => $artista]);
+        if(isset($artista)) $query = $query->andWhere(['artistes.nom' => $artista]);
         if(isset($data)) $query = $query->andWhere('concerts.data like "'.$data.'%"');
-        if(isset($poblacio)) $query = $query->andWhere(['poblacio_id' => $poblacio]);
+        if(isset($poblacio)) $query = $query->andWhere(['poblacions.nom' => $poblacio]);
         if($gratuit==1) $query = $query->andWhere(['preu' => 'Gratuït']);
         $query = $query->groupBy('concerts.id')->orderBy('data'); 
         $command = $query->createCommand();
@@ -119,6 +122,26 @@ class ConcertsController extends Controller
             'preu' => $concert->preu,
             'artistes' => $concert->artistes,  
             'mapa' => $concert->localitzacio->url,
+        ];
+        return $obj;
+    }
+
+    public function actionFiltres()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $artistes = Artistes::find()
+            ->select(['nom'])
+            ->orderBy('nom')
+            ->asArray()
+            ->all();
+        $poblacions = Poblacions::find()
+        ->select(['nom'])
+        ->orderBy('nom')
+        ->asArray()
+        ->all();
+        $obj = (object) [
+            'artistes' => array_column($artistes, 'nom'),            
+            'poblacions' => array_column($poblacions, 'nom'),
         ];
         return $obj;
     }
