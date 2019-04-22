@@ -77,7 +77,7 @@ while (len(concerts)!=0):
 
             desc = content.find("div", {"class": "txt-p2"})
             if(desc!=None):
-                desc = bytes(desc.get_text(), 'utf-8').decode('utf-8', 'ignore')
+                desc = ''.join([x for x in desc.get_text() if x in string.printable])
                 print(desc)
 
             webcard = content.find("div", {"class": "concert-content__web"})
