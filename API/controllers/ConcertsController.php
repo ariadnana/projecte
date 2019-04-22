@@ -113,7 +113,7 @@ class ConcertsController extends Controller
         $obj = (object) [
             'nom' => $concert->nom,
             'dia' => DateTime::createFromFormat("Y-m-d H:i:s", $concert->data)->format("d"),
-            'mes' => $mesos[intval(DateTime::createFromFormat("Y-m-d H:i:s", $concert->data)->format("m"))+1],
+            'mes' => $mesos[intval(DateTime::createFromFormat("Y-m-d H:i:s", $concert->data)->format("m"))-1],
             'hora' => DateTime::createFromFormat("Y-m-d H:i:s", $concert->data)->format("H:i"),
             'desc' => $concert->desc,
             'localitzacio' => $concert->localitzacio->nom,
@@ -130,12 +130,18 @@ class ConcertsController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $artistes = Artistes::find()
-            ->select(['nom'])
+            ->select(['artistes.nom'])
+            ->leftJoin('concerts_artistes', 'artista_id=artistes.id')
+            ->leftJoin('concerts', 'concert_id=concerts.id')
+            ->where('data>"'.date("Y-m-d").' 00:00:00"')
             ->orderBy('nom')
             ->asArray()
             ->all();
         $poblacions = Poblacions::find()
-        ->select(['nom'])
+        ->select(['poblacions.nom'])
+        ->leftJoin('localitzacions', 'poblacions.id=poblacio_id')
+        ->leftJoin('concerts', 'localitzacions.id=localitzacio_id')
+        ->where('data>"'.date("Y-m-d").' 00:00:00"')
         ->orderBy('nom')
         ->asArray()
         ->all();
