@@ -1,11 +1,12 @@
 package com.example.app;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +33,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class FiltreActivity extends AppCompatActivity {
     private static final String TAG = "ConcertAdapter";
@@ -38,6 +45,10 @@ public class FiltreActivity extends AppCompatActivity {
     private String[] poblacions;
     AutoCompleteTextView artistesfiltre;
     AutoCompleteTextView poblacionsfiltre;
+    EditText datafiltre;
+    Calendar calendari = Calendar.getInstance();
+    private Button buscarButton;
+    private Switch gratis;
 
 
     @Override
@@ -57,10 +68,40 @@ public class FiltreActivity extends AppCompatActivity {
         TextView iconpoblacio = (TextView)findViewById(R.id.iconpoblacio);
         iconpoblacio.setTypeface(font);
         iconpoblacio.setText(getString(R.string.icon_place)+" Població:");
+        TextView icondata = (TextView)findViewById(R.id.icondata);
+        icondata.setTypeface(font);
+        icondata.setText(getString(R.string.icon_calendar)+" Data:");
+        TextView icongratis = (TextView)findViewById(R.id.icongratis);
+        icongratis.setTypeface(font);
+        icongratis.setText(getString(R.string.icon_price)+" Gratuït:");
         artistesfiltre = findViewById(R.id.artista);
         artistesfiltre.setTypeface(font);
         poblacionsfiltre = findViewById(R.id.poblacio);
         poblacionsfiltre.setTypeface(font);
+        datafiltre = findViewById(R.id.data);
+        datafiltre.setTypeface(font);
+        datafiltre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(FiltreActivity.this, R.style.calendari, date, calendari
+                        .get(Calendar.YEAR), calendari.get(Calendar.MONTH),
+                        calendari.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        gratis = (Switch)findViewById(R.id.gratis);
+        buscarButton = (Button)findViewById(R.id.button);
+        buscarButton.setTypeface(font);
+        buscarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(FiltreActivity.this, ResultatActivity.class);
+                intent2.putExtra("artista", artistesfiltre.getText().toString());
+                intent2.putExtra("poblacio", poblacionsfiltre.getText().toString());
+                intent2.putExtra("data", datafiltre.getText().toString());
+                intent2.putExtra("gratis", gratis.isChecked());
+                startActivity(intent2);
+            }
+        });
     }
 
     @Override
@@ -129,5 +170,22 @@ public class FiltreActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            calendari.set(Calendar.YEAR, year);
+            calendari.set(Calendar.MONTH, monthOfYear);
+            calendari.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            actualizarInput();
+        }
+    };
+
+    private void actualizarInput() {
+        String formatoDeFecha = "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(formatoDeFecha);
+
+        datafiltre.setText(sdf.format(calendari.getTime()));
     }
 }

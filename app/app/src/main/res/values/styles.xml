@@ -15,5 +15,8 @@
         <item name="colorControlNormal">#000000</item>
         <item name="colorControlActivated">#8E5CD8</item>
     </style>
+    <style name="calendari" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#8E5CD8</item>
+    </style>
 
 </resources>
