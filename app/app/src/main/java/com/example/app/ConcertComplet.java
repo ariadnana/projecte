@@ -16,12 +16,13 @@ public class ConcertComplet {
     public String Web;
     public String Preu;
     public List<String> Artistes;
+    public String Mapa;
 
     public ConcertComplet() {
     }
 
     public ConcertComplet(String Nom, String Dia, String Mes, String Hora, String Desc, String Localitzacio, String Poblacio, String Web,
-                   String Preu, List<String> Artistes) {
+                   String Preu, List<String> Artistes, String Mapa) {
         this.Nom = Nom;
         this.Dia = Dia;
         this.Mes = Mes;
@@ -32,6 +33,7 @@ public class ConcertComplet {
         this.Web = Web;
         this.Preu = Preu;
         this.Artistes = Artistes;
+        this.Mapa = Mapa;
     }
 
     public String getNom() {
@@ -83,4 +85,8 @@ public class ConcertComplet {
     }
 
     public void setArtistes(List<String> Artistes) { this.Artistes = Artistes; }
+
+    public String getMapa() { return Mapa; }
+
+    public void seMapa(String Mapa) { this.Mapa = Mapa; }
 }

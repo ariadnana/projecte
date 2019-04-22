@@ -2,6 +2,7 @@ package com.example.app;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class ConcertActivity extends AppCompatActivity{
     private TextView web;
     private TextView preu;
     private Button awesomeButton;
+    private Button awesomeButton2;
 
     List<String> artistes;
     private ArrayAdapter<String> artistesAdapter;
@@ -93,6 +95,9 @@ public class ConcertActivity extends AppCompatActivity{
         awesomeButton = (Button)findViewById(R.id.awesome_button);
         awesomeButton.setTypeface(font);
         awesomeButton.setText(getString(R.string.icon_plus));
+        awesomeButton2 = (Button)findViewById(R.id.awesome_button2);
+        awesomeButton2.setTypeface(font);
+        awesomeButton2.setText(getString(R.string.icon_map));
     }
 
     void refreshConcertInfo() {
@@ -123,9 +128,27 @@ public class ConcertActivity extends AppCompatActivity{
         if(concert.getLocalitzacio()=="null"){
             if(concert.getPoblacio()=="null"){
                 localitzacio.setText(getString(R.string.icon_place)+" ");
+                awesomeButton2.setVisibility(View.GONE);
             }
         } else if(concert.getPoblacio()=="null"){
             localitzacio.setText(getString(R.string.icon_place)+" "+concert.getLocalitzacio());
+            awesomeButton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                    intent2.setData(Uri.parse(concert.getMapa()));
+                    startActivity(intent2);
+                }
+            });
+        } else {
+            awesomeButton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                    intent2.setData(Uri.parse(concert.getMapa()));
+                    startActivity(intent2);
+                }
+            });
         }
         web.setText(getString(R.string.icon_web)+" "+concert.getWeb());
         if(concert.getWeb()=="null"){
@@ -188,7 +211,8 @@ public class ConcertActivity extends AppCompatActivity{
                     c.getString("poblacio"),
                     c.getString("web"),
                     c.getString("preu"),
-                    artistes);
+                    artistes,
+                    c.getString("mapa"));
 
             refreshConcertInfo();
 
