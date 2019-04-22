@@ -3,6 +3,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 import pymysql.cursors
+import string
 
 connection = pymysql.connect(host='localhost',
                              user='ariadnatfg',
