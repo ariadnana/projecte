@@ -118,6 +118,7 @@ class ConcertsController extends Controller
             'web' => $concert->web,
             'preu' => $concert->preu,
             'artistes' => $concert->artistes,  
+            'mapa' => $concert->localitzacio->url,
         ];
         return $obj;
     }
