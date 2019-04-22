@@ -14,7 +14,6 @@ use Yii;
  * @property int $localitzacio_id
  * @property string $web
  * @property string $preu
- * @property string $imatge
  * @property string $nomcard
  *
  * @property Localitzacions $localitzacio
@@ -42,7 +41,7 @@ class Concerts extends \yii\db\ActiveRecord
             [['localitzacio_id'], 'integer'],
             [['nom', 'nomcard'], 'string', 'max' => 2048],
             [['web'], 'string', 'max' => 2000],
-            [['preu', 'imatge'], 'string', 'max' => 255],
+            [['preu'], 'string', 'max' => 255],
             [['localitzacio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Localitzacions::className(), 'targetAttribute' => ['localitzacio_id' => 'id']],
         ];
     }
@@ -60,7 +59,6 @@ class Concerts extends \yii\db\ActiveRecord
             'localitzacio_id' => 'Localitzacio ID',
             'web' => 'Web',
             'preu' => 'Preu',
-            'imatge' => 'Imatge',
             'nomcard' => 'Nomcard',
         ];
     }
