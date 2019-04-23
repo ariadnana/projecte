@@ -130,19 +130,21 @@ class ConcertsController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $artistes = Artistes::find()
-            ->select(['distinct artistes.nom'])
+            ->select(['artistes.nom'])
             ->leftJoin('concerts_artistes', 'artista_id=artistes.id')
             ->leftJoin('concerts', 'concert_id=concerts.id')
             ->where('data>"'.date("Y-m-d").' 00:00:00"')
             ->orderBy('nom')
+            ->distinct()
             ->asArray()
             ->all();
         $poblacions = Poblacions::find()
-        ->select(['distinct poblacions.nom'])
+        ->select(['poblacions.nom'])
         ->leftJoin('localitzacions', 'poblacions.id=poblacio_id')
         ->leftJoin('concerts', 'localitzacions.id=localitzacio_id')
         ->where('data>"'.date("Y-m-d").' 00:00:00"')
         ->orderBy('nom')
+        ->distinct()
         ->asArray()
         ->all();
         $obj = (object) [
