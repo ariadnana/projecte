@@ -66,8 +66,6 @@
                 android:id="@+id/Nom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:text="TextView"
                 android:textColor="#541fa2"
                 android:textSize="24sp"
