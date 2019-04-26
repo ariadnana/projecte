@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     List<Concert> concerts;
     private ConcertAdapter adapter;
     private Toolbar mTopToolbar;
+    private static final int EDIT_NAME=3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         concerts = new ArrayList<>();
         adapter = new ConcertAdapter(this);
 
-        fetchConcerts();
+        fetchConcerts(URL_BASE);
 
         RecyclerView llista = findViewById(R.id.llista);
         llista.setAdapter(adapter);
@@ -81,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void fetchConcerts() {
+    void fetchConcerts(String url) {
         RequestQueue requestQueue;
         JsonObjectRequest jsArrayRequest;
 
         requestQueue = Volley.newRequestQueue(this);
         jsArrayRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                URL_BASE ,
+                url ,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -205,6 +206,46 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch (requestCode){
+            case EDIT_NAME:
+                if (resultCode == RESULT_OK){
+                    String cond = "";
+                    String artista = data.getStringExtra("artista");
+                    if(!artista.equals("")){
+                        cond = "?artista="+artista;
+                    }
+                    String poblacio = data.getStringExtra("poblacio");
+                    if(!poblacio.equals("")){
+                        if(cond=="") {
+                            cond = "?poblacio="+poblacio;
+                        } else {
+                            cond = cond+"&poblacio="+poblacio;
+                        }
+                    }
+                    String data2 = data.getStringExtra("data");
+                    if(!data2.equals("")){
+                        if(cond=="") {
+                            cond = "?data="+data2.substring(6)+"-"+data2.substring(3, 5)+"-"+data2.substring(0, 2);
+                        } else {
+                            cond = cond+"&data="+data2.substring(6)+"-"+data2.substring(3, 5)+"-"+data2.substring(0, 2);
+                        }
+                    }
+                    Boolean gratis = data.getExtras().getBoolean("gratis");
+                    if(gratis){
+                        if(cond=="") {
+                            cond = "?gratuit=1";
+                        } else {
+                            cond = cond+"&gratuit=1";
+                        }
+                    }
+                    fetchConcerts(URL_BASE+cond);
+                }
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

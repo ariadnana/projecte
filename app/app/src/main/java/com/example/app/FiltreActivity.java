@@ -49,6 +49,7 @@ public class FiltreActivity extends AppCompatActivity {
     Calendar calendari = Calendar.getInstance();
     private Button buscarButton;
     private Switch gratis;
+    private static final int EDIT_NAME=3;
 
 
     @Override
@@ -60,6 +61,14 @@ public class FiltreActivity extends AppCompatActivity {
 
         mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
+        mTopToolbar.setNavigationIcon(R.drawable.ic_arrow);
+        mTopToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         Typeface font = Typeface.createFromAsset( getAssets(), "fonts/fa-solid-900.ttf" );
         TextView iconartista = (TextView)findViewById(R.id.iconartista);
@@ -94,12 +103,12 @@ public class FiltreActivity extends AppCompatActivity {
         buscarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(FiltreActivity.this, ResultatActivity.class);
+                Intent intent2 = new Intent(FiltreActivity.this, MainActivity.class);
                 intent2.putExtra("artista", artistesfiltre.getText().toString());
                 intent2.putExtra("poblacio", poblacionsfiltre.getText().toString());
                 intent2.putExtra("data", datafiltre.getText().toString());
                 intent2.putExtra("gratis", gratis.isChecked());
-                startActivity(intent2);
+               startActivityForResult(intent2, EDIT_NAME);
             }
         });
     }
@@ -109,19 +118,6 @@ public class FiltreActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_filtre, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_home) {
-            Intent intent = new Intent(FiltreActivity.this, MainActivity.class);
-            FiltreActivity.this.startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     void fetchFiltres() {

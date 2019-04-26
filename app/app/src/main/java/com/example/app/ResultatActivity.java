@@ -51,6 +51,14 @@ public class ResultatActivity extends AppCompatActivity {
 
         mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
+        mTopToolbar.setNavigationIcon(R.drawable.ic_arrow);
+        mTopToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         concerts = new ArrayList<>();
         adapter = new ConcertAdapter(this);
@@ -67,19 +75,6 @@ public class ResultatActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_filtre, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_home) {
-            Intent intent = new Intent(ResultatActivity.this, MainActivity.class);
-            ResultatActivity.this.startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     void fetchConcerts() {
