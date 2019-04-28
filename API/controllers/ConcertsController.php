@@ -154,9 +154,12 @@ class ConcertsController extends Controller
         return $obj;
     }
 
-    public function actionFavs($favs)
+    public function actionFavs($favs=null)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if(!isset($favs)) return (object) [
+            'items' => []
+        ];
         $query = new Query;
         $query	->select(['concerts.id', 'concerts.nom', 'day(data) as dia', 
         'CASE WHEN month(data) =  "1" THEN "Gen" WHEN month(data) =  "2" THEN "Feb" WHEN month(data) =  "3" THEN "Març" WHEN month(data) =  "4" THEN "Abr" WHEN month(data) =  "5" THEN "Maig" WHEN month(data) =  "6" THEN "Juny" WHEN month(data) =  "7" THEN "Jul" WHEN month(data) =  "8" THEN "Ago" WHEN month(data) =  "9" THEN "Set" WHEN month(data) =  "10" THEN "Oct" WHEN month(data) =  "11" THEN "Nov" ELSE "Des" END as mes', 
