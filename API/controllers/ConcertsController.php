@@ -153,4 +153,31 @@ class ConcertsController extends Controller
         ];
         return $obj;
     }
+
+    public function actionFavs($favs)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $query = new Query;
+        $query	->select(['concerts.id', 'concerts.nom', 'day(data) as dia', 
+        'CASE WHEN month(data) =  "1" THEN "Gen" WHEN month(data) =  "2" THEN "Feb" WHEN month(data) =  "3" THEN "Març" WHEN month(data) =  "4" THEN "Abr" WHEN month(data) =  "5" THEN "Maig" WHEN month(data) =  "6" THEN "Juny" WHEN month(data) =  "7" THEN "Jul" WHEN month(data) =  "8" THEN "Ago" WHEN month(data) =  "9" THEN "Set" WHEN month(data) =  "10" THEN "Oct" WHEN month(data) =  "11" THEN "Nov" ELSE "Des" END as mes', 
+        'substring(time(data), 1, 5)  as hora', 'preu', 'poblacions.nom as localitzacio'])  
+                ->from('concerts')
+                ->join('LEFT JOIN', 'localitzacions',
+                    'concerts.localitzacio_id =localitzacions.id')
+                ->join('LEFT JOIN', 'poblacions',
+                    'localitzacions.poblacio_id =poblacions.id')
+                ->join('LEFT JOIN', 'concerts_artistes',
+                    'concerts_artistes.concert_id =concerts.id')
+                    ->join('LEFT JOIN', 'artistes',
+                        'concerts_artistes.artista_id =artistes.id')
+                ->where('data>"'.date("Y-m-d").' 00:00:00"')
+                ->andWhere("concerts.id in (".$favs.")");
+        $query = $query->groupBy('concerts.id')->orderBy('data'); 
+        $command = $query->createCommand();
+        $obj = (object) [
+            'items' => $command->queryAll()
+        ];
+        return $obj;
+
+    }
 }
