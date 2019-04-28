@@ -51,6 +51,7 @@ $config = [
                 '' => 'concerts/index',                                
                 '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>/<favs>' => '<controller>/<action>',
             ],
         ],
         
