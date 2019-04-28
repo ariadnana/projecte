@@ -171,7 +171,7 @@ class ConcertsController extends Controller
                     ->join('LEFT JOIN', 'artistes',
                         'concerts_artistes.artista_id =artistes.id')
                 ->where('data>"'.date("Y-m-d").' 00:00:00"')
-                ->andWhere("concerts.id in (".$favs.")");
+                ->andWhere("concerts.id in (".substr($favs, 0, -1).")");
         $query = $query->groupBy('concerts.id')->orderBy('data'); 
         $command = $query->createCommand();
         $obj = (object) [
