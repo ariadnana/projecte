@@ -79,6 +79,7 @@
                 android:layout_marginTop="10dp"
                 android:text="TextView"
                 android:textColor="#8E5CD8"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Nom" />
 
@@ -89,6 +90,7 @@
                 android:layout_marginTop="10dp"
                 android:text="TextView"
                 android:textColor="#8E5CD8"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Lloc" />
         </LinearLayout>
@@ -107,6 +109,7 @@
         android:layout_marginRight="16dp"
         android:text="TextView"
         android:textColor="#8E5CD8"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -123,6 +126,7 @@
         android:maxLines="3"
         android:text="TextView"
         android:textColor="#8E5CD8"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -135,11 +139,37 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:autoLink="web"
         android:text="TextView"
         android:textColor="#8E5CD8"
         android:textColorLink="#8E5CD8"
-        android:autoLink="web"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/firstDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/Web"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="#8E5CD8" />
+
+    <TextView
+        android:id="@+id/titolartistes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/firstDivider"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="5dp"
+        android:text="Artistes"
+        android:textColor="#8E5CD8"
+        android:textColorLink="#8E5CD8"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -164,6 +194,19 @@
         android:layout_marginBottom="-3dp"
         android:background="@drawable/button"
         android:padding="0dp"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/awesome_button3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button"
         android:textColor="@color/cardview_light_background"
         android:textSize="12sp" />
 

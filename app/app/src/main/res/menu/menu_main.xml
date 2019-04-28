@@ -5,6 +5,13 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/action_favs"
+        android:orderInCategory="300"
+        android:title="Preferits"
+        android:icon="@drawable/ic_heart_bar"
+        app:showAsAction="ifRoom"></item>
+
+    <item
     android:id="@+id/action_search"
     android:orderInCategory="300"
     android:title="Buscar"

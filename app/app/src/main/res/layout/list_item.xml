@@ -79,6 +79,7 @@
                 android:layout_marginTop="3dp"
                 android:text="TextView"
                 android:textColor="#8E5CD8"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Nom" />
 
@@ -89,6 +90,7 @@
                 android:layout_marginTop="3dp"
                 android:text="TextView"
                 android:textColor="#8E5CD8"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Hora" />
 
@@ -99,6 +101,7 @@
                 android:layout_marginTop="3dp"
                 android:text="TextView"
                 android:textColor="#8E5CD8"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Lloc" />
         </LinearLayout>

@@ -49,7 +49,10 @@ public class FiltreActivity extends AppCompatActivity {
     Calendar calendari = Calendar.getInstance();
     private Button buscarButton;
     private Switch gratis;
-    private static final int EDIT_NAME=3;
+    private String artista;
+    private String poblacio;
+    private Boolean gratisfiltre;
+    private String data;
 
 
     @Override
@@ -85,10 +88,16 @@ public class FiltreActivity extends AppCompatActivity {
         icongratis.setText(getString(R.string.icon_price)+" Gratuït:");
         artistesfiltre = findViewById(R.id.artista);
         artistesfiltre.setTypeface(font);
+        artista = getIntent().getStringExtra("artista");
+        if(artista!=null)artistesfiltre.setText(artista);
         poblacionsfiltre = findViewById(R.id.poblacio);
         poblacionsfiltre.setTypeface(font);
+        poblacio = getIntent().getStringExtra("poblacio");
+        if(poblacio!=null)poblacionsfiltre.setText(poblacio);
         datafiltre = findViewById(R.id.data);
         datafiltre.setTypeface(font);
+        data = getIntent().getStringExtra("data");
+        if(data!=null)datafiltre.setText(data);
         datafiltre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,18 +106,49 @@ public class FiltreActivity extends AppCompatActivity {
                         calendari.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        TextView clearartista = (TextView)findViewById(R.id.clearartista);
+        clearartista.setTypeface(font);
+        clearartista.setText(getString(R.string.icon_clear));
+        clearartista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                artistesfiltre.setText("");
+            }
+        });
+        TextView clearpoblacio = (TextView)findViewById(R.id.clearpoblacio);
+        clearpoblacio.setTypeface(font);
+        clearpoblacio.setText(getString(R.string.icon_clear));
+        clearpoblacio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                poblacionsfiltre.setText("");
+            }
+        });
+        TextView cleardata = (TextView)findViewById(R.id.cleardata);
+        cleardata.setTypeface(font);
+        cleardata.setText(getString(R.string.icon_clear));
+        cleardata.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datafiltre.setText("");
+            }
+        });
         gratis = (Switch)findViewById(R.id.gratis);
+        if(getIntent().getExtras()!=null){
+            gratis.setChecked(getIntent().getExtras().getBoolean("gratis"));
+        }
         buscarButton = (Button)findViewById(R.id.button);
         buscarButton.setTypeface(font);
         buscarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(FiltreActivity.this, MainActivity.class);
+                Intent intent2 = new Intent();
                 intent2.putExtra("artista", artistesfiltre.getText().toString());
                 intent2.putExtra("poblacio", poblacionsfiltre.getText().toString());
                 intent2.putExtra("data", datafiltre.getText().toString());
                 intent2.putExtra("gratis", gratis.isChecked());
-               startActivityForResult(intent2, EDIT_NAME);
+                setResult(RESULT_OK, intent2);
+                finish();
             }
         });
     }

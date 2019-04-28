@@ -1,10 +1,14 @@
 package com.example.app;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,7 +47,17 @@ public class MainActivity extends AppCompatActivity {
     List<Concert> concerts;
     private ConcertAdapter adapter;
     private Toolbar mTopToolbar;
-    private static final int EDIT_NAME=3;
+    private static final int FILTRE=3;
+    private static final int CONCERT=2;
+    private Button borrarButton;
+    private Button nofavsButton;
+    private String artista;
+    private String poblacio;
+    private String data2;
+    private Boolean gratis;
+    private TextView noResults;
+    private boolean doubleBackToExitPressedOnce = false;
+    private String favs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +75,37 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView llista = findViewById(R.id.llista);
         llista.setAdapter(adapter);
         llista.setLayoutManager(new LinearLayoutManager(this));
+
+        borrarButton = (Button)findViewById(R.id.button);
+        Typeface font = Typeface.createFromAsset( getAssets(), "fonts/fa-solid-900.ttf" );
+        borrarButton.setTypeface(font);
+        borrarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                concerts.clear();
+                artista = null;
+                poblacio = null;
+                data2 = null;
+                gratis = null;
+                fetchConcerts(URL_BASE);
+                borrarButton.setVisibility(View.GONE);
+            }
+        });
+
+        nofavsButton = (Button)findViewById(R.id.button2);
+        nofavsButton.setTypeface(font);
+        nofavsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                concerts.clear();
+                favs=null;
+                fetchConcerts(URL_BASE);
+                nofavsButton.setVisibility(View.GONE);
+            }
+        });
+
+        noResults = findViewById(R.id.noResults);
+        noResults.setTypeface(font);
     }
 
     @Override
@@ -74,8 +120,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_search) {
-            Intent intent = new Intent(MainActivity.this, FiltreActivity.class);
-            MainActivity.this.startActivity(intent);
+            filter();
+            return true;
+        }
+
+        if (id == R.id.action_favs) {
+            SharedPreferences favspref = getSharedPreferences("Preferencies", Context.MODE_PRIVATE);
+            favs = favspref.getString("favs", "");
+            concerts.clear();
+            fetchConcerts(URL_BASE+"/favs/"+favs);
+            nofavsButton.setVisibility(View.VISIBLE);
             return true;
         }
 
@@ -164,9 +218,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent intent = new Intent(mContext, ConcertActivity.class);
+                    Intent intent = new Intent(MainActivity.this, ConcertActivity.class);
                     intent.putExtra("id", concerts.get(pos).Id);
-                    mContext.startActivity(intent);
+                    MainActivity.this.startActivityForResult(intent, CONCERT);
                 }
             });
         }
@@ -182,7 +236,11 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             jsonArray = jsonObject.getJSONArray("items");
-
+            if(jsonArray.length()==0){
+                noResults.setVisibility(View.VISIBLE);
+            } else {
+                noResults.setVisibility(View.GONE);
+            }
             for(int i=0; i<jsonArray.length(); i++){
 
                 try {
@@ -211,14 +269,14 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         switch (requestCode){
-            case EDIT_NAME:
+            case FILTRE:
                 if (resultCode == RESULT_OK){
                     String cond = "";
-                    String artista = data.getStringExtra("artista");
+                    artista = data.getStringExtra("artista");
                     if(!artista.equals("")){
                         cond = "?artista="+artista;
                     }
-                    String poblacio = data.getStringExtra("poblacio");
+                    poblacio = data.getStringExtra("poblacio");
                     if(!poblacio.equals("")){
                         if(cond=="") {
                             cond = "?poblacio="+poblacio;
@@ -226,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                             cond = cond+"&poblacio="+poblacio;
                         }
                     }
-                    String data2 = data.getStringExtra("data");
+                    data2 = data.getStringExtra("data");
                     if(!data2.equals("")){
                         if(cond=="") {
                             cond = "?data="+data2.substring(6)+"-"+data2.substring(3, 5)+"-"+data2.substring(0, 2);
@@ -234,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                             cond = cond+"&data="+data2.substring(6)+"-"+data2.substring(3, 5)+"-"+data2.substring(0, 2);
                         }
                     }
-                    Boolean gratis = data.getExtras().getBoolean("gratis");
+                    gratis = data.getExtras().getBoolean("gratis");
                     if(gratis){
                         if(cond=="") {
                             cond = "?gratuit=1";
@@ -242,10 +300,57 @@ public class MainActivity extends AppCompatActivity {
                             cond = cond+"&gratuit=1";
                         }
                     }
+                    concerts.clear();
                     fetchConcerts(URL_BASE+cond);
+                    borrarButton.setVisibility(View.VISIBLE);
                 }
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
+            case CONCERT:
+                if (resultCode == RESULT_OK){
+                    if(favs!=null){
+                        concerts.clear();
+                        favs = data.getStringExtra("favs");
+                        fetchConcerts(URL_BASE+"/favs/"+favs);
+                    }
+                }
+        }
+    }
+
+    public void filter(){
+        Intent intent = new Intent(MainActivity.this, FiltreActivity.class);
+        intent.putExtra("artista", artista);
+        intent.putExtra("poblacio", poblacio);
+        intent.putExtra("data",data2);
+        intent.putExtra("gratis", gratis);
+        MainActivity.this.startActivityForResult(intent, FILTRE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (artista==null && poblacio==null && data2==null && gratis==null) {
+            if(favs==null) {
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed();
+                    return;
+                }
+
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Prem enrere un altre cop per sortir", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            } else {
+                favs = null;
+                concerts.clear();
+                fetchConcerts(URL_BASE);
+                nofavsButton.setVisibility(View.GONE);
+            }
+        } else {
+            filter();
         }
     }
 }

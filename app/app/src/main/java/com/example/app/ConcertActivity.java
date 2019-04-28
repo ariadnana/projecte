@@ -1,6 +1,8 @@
 package com.example.app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,11 +53,17 @@ public class ConcertActivity extends AppCompatActivity{
     private TextView poblacio;
     private TextView web;
     private TextView preu;
+    private TextView titol;
     private Button awesomeButton;
     private Button awesomeButton2;
-
+    private Button awesomeButton3;
     List<String> artistes;
     private ArrayAdapter<String> artistesAdapter;
+    private SharedPreferences favspref;
+    private String favs;
+    private Typeface font;
+    private Typeface font2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +98,8 @@ public class ConcertActivity extends AppCompatActivity{
 
         llg.setAdapter(artistesAdapter);
 
-        Typeface font = Typeface.createFromAsset( getAssets(), "fonts/fa-solid-900.ttf" );
+        font = Typeface.createFromAsset( getAssets(), "fonts/fa-solid-900.ttf" );
+        font2 = Typeface.createFromAsset( getAssets(), "fonts/fa-regular-400.ttf" );
         nom = (TextView)findViewById(R.id.Nom);
         nom.setTypeface(font);
         dia = (TextView)findViewById(R.id.Dia);
@@ -113,6 +122,35 @@ public class ConcertActivity extends AppCompatActivity{
         awesomeButton2 = (Button)findViewById(R.id.awesome_button2);
         awesomeButton2.setTypeface(font);
         awesomeButton2.setText(getString(R.string.icon_map));
+        awesomeButton3 = (Button)findViewById(R.id.awesome_button3);
+        favspref = getSharedPreferences("Preferencies", Context.MODE_PRIVATE);
+        favs = favspref.getString("favs", "");
+        if(favs.startsWith(String.valueOf(id)+",") || favs.contains(","+String.valueOf(id)+",")){
+            awesomeButton3.setTypeface(font);
+        } else {
+            awesomeButton3.setTypeface(font2);
+        }
+        awesomeButton3.setText(getString(R.string.icon_fav));
+        awesomeButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(favs.startsWith(String.valueOf(id)+",")){
+                    awesomeButton3.setTypeface(font2);
+                    favs = favs.substring((String.valueOf(id).length()+1));
+                } else if (favs.contains(","+String.valueOf(id)+",")){
+                    awesomeButton3.setTypeface(font2);
+                    favs = favs.substring(0, favs.indexOf(","+String.valueOf(id)+","))+favs.substring((favs.indexOf(","+String.valueOf(id)+",")+String.valueOf(id).length()+1));
+                } else {
+                    awesomeButton3.setTypeface(font);
+                    favs = favs+String.valueOf(id)+",";
+                }
+                SharedPreferences.Editor editor = favspref.edit();
+                editor.putString("favs", favs);
+                editor.commit();
+            }
+        });
+        titol = (TextView)findViewById(R.id.titolartistes);
+        titol.setTypeface(font);
     }
 
     @Override
@@ -126,7 +164,7 @@ public class ConcertActivity extends AppCompatActivity{
         nom.setText(concert.getNom());
         desc.setText(getString(R.string.icon_info)+" "+concert.getDesc().trim());
         if(concert.getDesc()=="null") {
-            desc.setText(getString(R.string.icon_info));
+            desc.setVisibility(View.GONE);
         } else if(desc.getLineCount()==3){
             awesomeButton.setVisibility(View.VISIBLE);
             awesomeButton.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +179,7 @@ public class ConcertActivity extends AppCompatActivity{
         }
         preu.setText(getString(R.string.icon_price)+" "+concert.getPreu());
         if(concert.getPreu()=="null"){
-            preu.setText(getString(R.string.icon_price));
+            preu.setVisibility(View.GONE);
         }
         dia.setText(concert.getDia());
         mes.setText(concert.getMes());
@@ -149,7 +187,7 @@ public class ConcertActivity extends AppCompatActivity{
         localitzacio.setText(getString(R.string.icon_place)+" "+concert.getLocalitzacio()+" "+concert.getPoblacio());
         if(concert.getLocalitzacio()=="null"){
             if(concert.getPoblacio()=="null"){
-                localitzacio.setText(getString(R.string.icon_place)+" ");
+                localitzacio.setVisibility(View.GONE);
                 awesomeButton2.setVisibility(View.GONE);
             }
         } else if(concert.getPoblacio()=="null"){
@@ -174,7 +212,7 @@ public class ConcertActivity extends AppCompatActivity{
         }
         web.setText(getString(R.string.icon_web)+" "+concert.getWeb());
         if(concert.getWeb()=="null"){
-            web.setText(getString(R.string.icon_web));
+            web.setVisibility(View.GONE);
         }
         artistes = concert.getArtistes();
         artistesAdapter.addAll(artistes);
@@ -241,5 +279,13 @@ public class ConcertActivity extends AppCompatActivity{
         } catch (JSONException e) {
             Log.e("ConcertActivity", "Error de parsing: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent3 = new Intent();
+        intent3.putExtra("favs",favs);
+        setResult(RESULT_OK, intent3);
+        finish();
     }
 }

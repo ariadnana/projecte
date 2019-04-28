@@ -20,7 +20,6 @@
         <activity android:name=".ConcertActivity" />
         <activity android:name=".DescripcioActivity" />
         <activity android:name=".FiltreActivity" />
-        <activity android:name=".ResultatActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 
