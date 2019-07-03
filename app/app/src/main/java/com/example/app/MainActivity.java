@@ -208,7 +208,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int pos) {
             holder.Nom.setText(String.valueOf(concerts.get(pos).Nom));
-            holder.Dia.setText(String.valueOf(concerts.get(pos).Dia));
+            if(concerts.get(pos).Dia<10)holder.Dia.setText("0"+String.valueOf(concerts.get(pos).Dia));
+            else holder.Dia.setText(String.valueOf(concerts.get(pos).Dia));
             holder.Mes.setText(String.valueOf(concerts.get(pos).Mes));
             holder.Lloc.setText(getString(R.string.icon_place)+" "+String.valueOf(concerts.get(pos).Lloc));
             holder.Hora.setText(getString(R.string.icon_clock)+" "+String.valueOf(concerts.get(pos).Hora));
